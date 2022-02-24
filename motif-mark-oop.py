@@ -93,10 +93,11 @@ def fasta_parser(fasta: str):
     return seq_obs
 
 seq_obs = fasta_parser(args.fasta)
+print(seq_obs)
 
 #define cairo surface and context
 width = 500 
-height = 100 * len(keys(seq_obs))
+height = 100 * len(seq_obs.keys())
 surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
 context = cairo.Context(surface)
 context.set_line_width(1)
