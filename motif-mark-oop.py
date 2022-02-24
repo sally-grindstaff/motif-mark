@@ -72,3 +72,31 @@ test = Motif('yaaan','red')
 
 testseq = Sequence('caaaa','seq1')
 
+#create sequence objects and something to keep track of them by parsing fasta file
+def fasta_parser(fasta: str):
+    '''Reads fasta file, creates object for each sequence'''
+    seq = ''
+    seq_obs = {}
+    with open(fasta, 'r') as fh:
+        for line in fh:
+            line = line.strip()
+            if line[0] == '>' and seq != '':
+                #create sequence object from header and seq
+                seq_obs[header] = Sequence(seq,header) 
+                seq = ''
+            if line[0] == '>':
+                header = line[1:]
+            else:
+                seq += line
+        #create final sequence object from header and seq
+        seq_obs[header] = Sequence(seq,header)
+    return seq_obs
+
+seq_obs = fasta_parser(args.fasta)
+
+#define cairo surface and context
+width = 500 
+height = 100 * len(keys(seq_obs))
+surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+context = cairo.Context(surface)
+context.set_line_width(1)
