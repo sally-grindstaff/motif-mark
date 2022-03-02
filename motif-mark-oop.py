@@ -49,7 +49,7 @@ class Motif:
     #methods
     def change_color(self,Context):
         Context.set_source_rgb(self.color[0],self.color[1],self.color[2])
-    def find_motifs(self,Sequence,Context,base_coords,count):
+    def find_motifs(self,Sequence,Context,base_coords,sequence_count):
         '''Interacts with Sequence object and Pycairo Context object; finds instances of motif in sequence and draws them'''
         # Compile regex search pattern from motif
         pattern = ''
@@ -74,8 +74,9 @@ class Motif:
                 match = p.search(Sequence.seq.lower(), pos=match.start() + 1)
             if match == None:
                 break
-            Context.move_to(base_coords[0] + match.start(), base_coords[1] + (100 * count))
-            Context.line_to(base_coords[0] + match.start() + len(self.seq) - 1, base_coords[1] + (100* count))
+            print(self.seq,Sequence.header,match.start(),base_coords[0] + match.start(), base_coords[1] + (100 * sequence_count),base_coords[0] + match.start() + len(self.seq) - 1, base_coords[1] + (100* sequence_count))
+            Context.move_to(base_coords[0] + match.start(), base_coords[1] + (100 * sequence_count))
+            Context.line_to(base_coords[0] + match.start() + len(self.seq) - 1, base_coords[1] + (100* sequence_count))
             Context.stroke()
 
 #create sequence objects and something to keep track of them by parsing fasta file
