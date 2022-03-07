@@ -74,7 +74,6 @@ class Motif:
                 match = p.search(Sequence.seq.lower(), pos=match.start() + 1)
             if match == None:
                 break
-            print(self.seq,Sequence.header,match.start(),base_coords[0] + match.start(), base_coords[1] + (100 * sequence_count),base_coords[0] + match.start() + len(self.seq) - 1, base_coords[1] + (100* sequence_count))
             Context.move_to(base_coords[0] + match.start(), base_coords[1] + (100 * sequence_count))
             Context.line_to(base_coords[0] + match.start() + len(self.seq) - 1, base_coords[1] + (100* sequence_count))
             Context.stroke()
@@ -110,13 +109,16 @@ context = cairo.Context(surface)
 #draw sequence introns and exons
 count = 0
 base_coords = [50,100]
+context.set_font_size(15)
 for seq_ob in seq_obs:
     exon_coords = seq_obs[seq_ob].get_exon_coords()
+    context.move_to(base_coords[0], base_coords[1]+(100*count)-40)
+    context.show_text(seq_obs[seq_ob].header)
     context.move_to(base_coords[0], base_coords[1]+(100*count))
-    context.set_line_width(30)
+    context.set_line_width(10)
     context.line_to(base_coords[0]+len(seq_obs[seq_ob].seq)-1, base_coords[1]+(100*count))
     context.stroke()
-    context.set_line_width(80)
+    context.set_line_width(40)
     context.move_to(base_coords[0]+exon_coords[0], base_coords[1]+(100*count))
     context.line_to(50+exon_coords[1], base_coords[1]+(100*count))
     context.stroke()
@@ -155,7 +157,7 @@ color_dict = {
         
 
 fh = open(args.motif, 'r')
-context.set_line_width(90)
+context.set_line_width(50)
 color_count = 0
 for line in fh:
     color_count += 1
