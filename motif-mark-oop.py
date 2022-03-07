@@ -102,7 +102,7 @@ seq_obs = fasta_parser(args.fasta)
 
 #define cairo surface and context
 width = 1100 
-height = (100 * len(seq_obs.keys())) + 100
+height = (100 * len(seq_obs.keys())) + 300
 surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
 context = cairo.Context(surface)
 
@@ -157,21 +157,48 @@ color_dict = {
         
 
 fh = open(args.motif, 'r')
-context.set_line_width(50)
 color_count = 0
 for line in fh:
     color_count += 1
     line = line.strip()
     motif_ob = Motif(line,color_dict[color_count])
     count = 0
+    context.set_line_width(50)
     for seq_ob in seq_obs:
         motif_ob.find_motifs(seq_obs[seq_ob],context,base_coords,count)
         count += 1
+    #add motif to legend
+    context.set_line_width(30)
+    context.move_to(base_coords[0], base_coords[1] + 100*len(seq_obs) + 40*color_count + 10)
+    context.line_to(base_coords[0]+30, base_coords[1] + 100*len(seq_obs) + 40*color_count + 10)
+    context.stroke()
+    context.set_font_size(15)
+    context.set_source_rgb(0,0,0)
+    context.move_to(base_coords[0]+50, base_coords[1] + 100*len(seq_obs) + 40*color_count + 15)
+    context.show_text(motif_ob.seq)
     # draw introns and exons
     # parse motif file
         # for each motif, draw all instances of motif
 fh.close()
-surface.write_to_png('test.png')
+
+#add intron to legend
+context.set_source_rgb(0,0,0)
+context.set_line_width(10)
+context.move_to(base_coords[0], base_coords[1] + 100*len(seq_obs) - 40)
+context.line_to(base_coords[0]+30, base_coords[1] + 100*len(seq_obs) - 40)
+context.stroke()
+context.move_to(base_coords[0]+50, base_coords[1] + 100*len(seq_obs) - 35)
+context.show_text('Intron')
+#add exon to legend
+context.set_line_width(50)
+context.move_to(base_coords[0], base_coords[1] + 100*len(seq_obs))
+context.line_to(base_coords[0]+30, base_coords[1] + 100*len(seq_obs))
+context.stroke()
+context.move_to(base_coords[0]+50, base_coords[1] + 100*len(seq_obs) + 5)
+context.show_text('Exon')
+
+out_name = re.sub(r'(.+)\.fa(sta)*',r'\1',args.fasta)
+surface.write_to_png(out_name+'.png')
 
 # make legend
 # deal with reverse complements?
