@@ -39,7 +39,7 @@ class Sequence:
     #methods
     def get_exon_coords(self):
         m = re.search(r'[ATCG]+',self.seq)
-        return [m.start(),m.end()-1]
+        return [m.start(),m.end()]
 
 class Motif:
     def __init__(self,seq,color):
@@ -48,7 +48,7 @@ class Motif:
         self.color = color
     #methods
     def change_color(self,Context):
-        Context.set_source_rgb(self.color[0],self.color[1],self.color[2])
+        Context.set_source_rgba(self.color[0],self.color[1],self.color[2],0.5)
     def find_motifs(self,Sequence,Context,base_coords,sequence_count):
         '''Interacts with Sequence object and Pycairo Context object; finds instances of motif in sequence and draws them'''
         # Compile regex search pattern from motif
@@ -75,7 +75,7 @@ class Motif:
             if match == None:
                 break
             Context.move_to(base_coords[0] + match.start(), base_coords[1] + (100 * sequence_count))
-            Context.line_to(base_coords[0] + match.start() + len(self.seq) - 1, base_coords[1] + (100* sequence_count))
+            Context.line_to(base_coords[0] + match.start() + len(self.seq), base_coords[1] + (100* sequence_count))
             Context.stroke()
 
 #create sequence objects and something to keep track of them by parsing fasta file
@@ -116,11 +116,11 @@ for seq_ob in seq_obs:
     context.show_text(seq_obs[seq_ob].header)
     context.move_to(base_coords[0], base_coords[1]+(100*count))
     context.set_line_width(10)
-    context.line_to(base_coords[0]+len(seq_obs[seq_ob].seq)-1, base_coords[1]+(100*count))
+    context.line_to(base_coords[0]+len(seq_obs[seq_ob].seq), base_coords[1]+(100*count))
     context.stroke()
     context.set_line_width(40)
     context.move_to(base_coords[0]+exon_coords[0], base_coords[1]+(100*count))
-    context.line_to(50+exon_coords[1], base_coords[1]+(100*count))
+    context.line_to(base_coords[0]+exon_coords[1], base_coords[1]+(100*count))
     context.stroke()
     count += 1
 
