@@ -78,7 +78,7 @@ class Motif:
             Context.line_to(base_coords[0] + match.start() + len(self.seq), base_coords[1] + (100* sequence_count))
             Context.stroke()
 
-#create sequence objects and something to keep track of them by parsing fasta file
+#create sequence objects and dictionary to keep track of them by parsing fasta file
 def fasta_parser(fasta: str):
     '''Reads fasta file, creates object for each sequence'''
     seq = ''
@@ -124,10 +124,6 @@ for seq_ob in seq_obs:
     context.stroke()
     count += 1
 
-# main loop: for each Sequence object in seq_obs:
-# - label sequence and draw introns and exons with pycairo
-# - for each sequence, find and draw all occurrences of each motif on sequence
-
 #dictionary containing rgb values for up to 5 different motifs. 
 #keys are counts (corresponding to count below while looping through motifs file)
 #values are lists of rgb values
@@ -140,30 +136,17 @@ color_dict = {
     5 : [0.5, 0.1, 0.5]
 }
 
-# test drawing lines
-#with open(args.motif, 'r') as fh:
-    #count = 0
-    #coords = [50,50]
-    #for line in fh:
-        #count += 1
-        #line = line.strip()
-        #motif_ob = Motif(line,color_dict[count])
-        #motif_ob.change_color(context)
-        #context.move_to(coords[0],coords[1])
-        #context.line_to(coords[0]+50, coords[1])
-        #context.stroke()
-        #coords[1] = coords[1] + 50
-    #surface.write_to_png('test.png')
-        
-
+#parse motifs file; create each motif object and call find_motifs method to find and draw motif instances on sequences
 fh = open(args.motif, 'r')
 color_count = 0
 for line in fh:
     color_count += 1
     line = line.strip()
+    #create motif object
     motif_ob = Motif(line,color_dict[color_count])
     count = 0
     context.set_line_width(50)
+    #draw all instances of motif on each sequence
     for seq_ob in seq_obs:
         motif_ob.find_motifs(seq_obs[seq_ob],context,base_coords,count)
         count += 1
@@ -176,9 +159,6 @@ for line in fh:
     context.set_source_rgb(0,0,0)
     context.move_to(base_coords[0] + 150*(color_count - 1) + 35, base_coords[1] + 100*len(seq_obs))
     context.show_text(motif_ob.seq)
-    # draw introns and exons
-    # parse motif file
-        # for each motif, draw all instances of motif
 fh.close()
 
 #add intron to legend
@@ -208,6 +188,3 @@ context.show_text('Legend')
 out_name = re.sub(r'(.+)\.fa(sta)*',r'\1',args.fasta)
 surface.write_to_png(out_name+'.png')
 
-# make legend
-# deal with reverse complements?
-# why is the motif thing longer than the sequence
