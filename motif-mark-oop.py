@@ -169,12 +169,12 @@ for line in fh:
         count += 1
     #add motif to legend
     context.set_line_width(30)
-    context.move_to(base_coords[0], base_coords[1] + 100*len(seq_obs) + 40*color_count + 10)
-    context.line_to(base_coords[0]+30, base_coords[1] + 100*len(seq_obs) + 40*color_count + 10)
+    context.move_to(base_coords[0] + 150*(color_count - 1), base_coords[1] + 100*len(seq_obs))
+    context.line_to(base_coords[0] + 150*(color_count - 1) + 30, base_coords[1] + 100*len(seq_obs))
     context.stroke()
     context.set_font_size(15)
     context.set_source_rgb(0,0,0)
-    context.move_to(base_coords[0]+50, base_coords[1] + 100*len(seq_obs) + 40*color_count + 15)
+    context.move_to(base_coords[0] + 150*(color_count - 1) + 35, base_coords[1] + 100*len(seq_obs))
     context.show_text(motif_ob.seq)
     # draw introns and exons
     # parse motif file
@@ -184,18 +184,26 @@ fh.close()
 #add intron to legend
 context.set_source_rgb(0,0,0)
 context.set_line_width(10)
-context.move_to(base_coords[0], base_coords[1] + 100*len(seq_obs) - 40)
-context.line_to(base_coords[0]+30, base_coords[1] + 100*len(seq_obs) - 40)
+context.move_to(base_coords[0], base_coords[1] + 100*len(seq_obs) + 70)
+context.line_to(base_coords[0] + 30, base_coords[1] + 100*len(seq_obs) + 70)
 context.stroke()
-context.move_to(base_coords[0]+50, base_coords[1] + 100*len(seq_obs) - 35)
+context.move_to(base_coords[0] + 35, base_coords[1] + 100*len(seq_obs) + 70)
 context.show_text('Intron')
 #add exon to legend
 context.set_line_width(50)
-context.move_to(base_coords[0], base_coords[1] + 100*len(seq_obs))
-context.line_to(base_coords[0]+30, base_coords[1] + 100*len(seq_obs))
+context.move_to(base_coords[0] + 150, base_coords[1] + 100*len(seq_obs) + 70)
+context.line_to(base_coords[0] + 150 + 30, base_coords[1] + 100*len(seq_obs) + 70)
 context.stroke()
-context.move_to(base_coords[0]+50, base_coords[1] + 100*len(seq_obs) + 5)
+context.move_to(base_coords[0] + 150 + 35, base_coords[1] + 100*len(seq_obs) + 70)
 context.show_text('Exon')
+
+#add legend title and box around legend
+context.set_line_width(1)
+context.rectangle(base_coords[0] - 10, base_coords[1] + 100*len(seq_obs) - 60, 150*5 + 10, 200)
+context.stroke()
+context.set_font_size(20)
+context.move_to(base_coords[0], base_coords[1] + 100*len(seq_obs) - 40)
+context.show_text('Legend')
 
 out_name = re.sub(r'(.+)\.fa(sta)*',r'\1',args.fasta)
 surface.write_to_png(out_name+'.png')
