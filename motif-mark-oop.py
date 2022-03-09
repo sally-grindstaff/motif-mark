@@ -16,19 +16,19 @@ symbol_dict = {
     'a' : 'a',
     'c': 'c',
     'g' : 'g',
-    't' : 't',
-    'u' : 't',
-    'w' : ['a','t'],
+    't' : ['t','u'],
+    'u' : ['u','t'],
+    'w' : ['a','t','u'],
     's' : ['c','g'],
     'm' : ['a','c'],
-    'k' : ['g','t'],
+    'k' : ['g','t','u'],
     'r' : ['a','g'],
-    'y' : ['c','t'],
-    'b' : ['c','g','t'],
-    'd' : ['a','g','t'],
-    'h' : ['a','c','t'],
+    'y' : ['c','t','u'],
+    'b' : ['c','g','t','u'],
+    'd' : ['a','g','t','u'],
+    'h' : ['a','c','t','u'],
     'v' : ['a','c','g'],
-    'n' : ['a','c','g','t']
+    'n' : ['a','c','g','t','u']
 }
 # keys are IUPAC degenerate base symbols, values are represented bases
 
